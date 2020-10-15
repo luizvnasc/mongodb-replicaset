@@ -1,0 +1,44 @@
+version: "3.7"
+services:
+    node1:
+        image: mongo
+        volumes:
+            - ./data/db/node1:/data/db
+            - ./security:/var/mongodb/pki
+            - ./config/node1.conf:/var/config/node1.conf
+        entrypoint: ["mongod","--config","/var/config/node1.conf"]
+        ports: 
+            - 27017:27017
+        networks: 
+            replica_lan:
+                ipv4_address: 172.28.1.1
+    node2:
+        image: mongo
+        volumes:
+            - ./data/db/node2:/data/db
+            - ./security:/var/mongodb/pki
+            - ./config/node2.conf:/var/config/node2.conf
+        entrypoint: ["mongod","--config","/var/config/node2.conf"]
+        ports: 
+            - 27018:27018
+        networks: 
+            replica_lan:
+                ipv4_address: 172.28.1.2
+    node3:
+        image: mongo
+        volumes:
+            - ./data/db/node3:/data/db
+            - ./security:/var/mongodb/pki
+            - ./config/node3.conf:/var/config/node3.conf
+        entrypoint: ["mongod","--config","/var/config/node3.conf"]
+        ports: 
+            - 27019:27019
+        networks: 
+            replica_lan:
+                ipv4_address: 172.28.1.3
+networks:
+    replica_lan:
+        ipam:
+            driver: default
+            config:
+                - subnet: 172.28.0.0/16
